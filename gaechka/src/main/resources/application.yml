@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: "change-me-to-a-very-secret-key-change-me-change-me"
+    expiration-seconds: 3600
+    issuer: gaechka-auth-service
+  forwarding:
+    url: ""
