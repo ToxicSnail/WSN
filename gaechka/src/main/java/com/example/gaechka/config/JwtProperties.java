@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.jwt")
 public class JwtProperties {
 
-    private String secret = "oaoa-change-me-pls-to-a-very-secret-key-change-me";
+    private String secret = "oaoa-change-me-pls-to-a-very-secret-key-change-me";    // заглушка/фейк
     private long expirationSeconds = 3600;
     private String issuer = "gaechka-auth-service";
 
