@@ -3,7 +3,8 @@ server:
 
 app:
   jwt:
-    secret: "change-me-to-a-very-secret-key-change-me-change-me"
+    secret: "secret"
+    # weak secret, need to change
     expiration-seconds: 3600
     issuer: gaechka-auth-service
   forwarding:
