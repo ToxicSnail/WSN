@@ -1,6 +1,7 @@
 package com.example.gaechka.service;
 
 import com.example.gaechka.config.ForwardingProperties;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class TokenForwarder {
 
     private static final Logger log = LoggerFactory.getLogger(TokenForwarder.class);
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private ForwardingProperties properties;
 
     private final RestTemplate restTemplate = new RestTemplate();

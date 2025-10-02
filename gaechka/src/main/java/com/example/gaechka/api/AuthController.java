@@ -3,6 +3,7 @@ package com.example.gaechka.api;
 import com.example.gaechka.service.JwtService;
 import com.example.gaechka.service.TokenForwarder;
 import jakarta.validation.Valid;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private JwtService jwtService;
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private TokenForwarder tokenForwarder;
 
     @PostMapping("/token")
