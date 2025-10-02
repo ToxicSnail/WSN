@@ -1,27 +1,25 @@
 package com.example.gaechka.service;
 
 import com.example.gaechka.config.JwtProperties;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-// import com.example.gaechka.service.JWTCoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtService {
 
     private static final int MIN_SECRET_LENGTH = 32; // HS256 требует минимум 256 бит секрета
 
+    @Setter(onMethod_ = @Autowired)
     private JwtProperties properties;
 
-    @Autowired
-    public void setProperties(JwtProperties properties) {
-        this.properties = properties;
-    }
+    @Setter(onMethod_ = @Autowired)
+    private JWTCoder jwtCoder;
 
     public String generateToken(String username) {
         String secret = properties.getSecret();
@@ -33,13 +31,13 @@ public class JwtService {
         long expirationMillis = issuedAt.getTime() + properties.getExpirationSeconds() * 1000;
         Date expiration = new Date(expirationMillis);
 
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuer(properties.getIssuer())
-                .setIssuedAt(issuedAt)
-                .setExpiration(expiration)
-                .claim("username", username)
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
-                .compact();
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("sub", username);
+        payload.put("username", username);
+        payload.put("iss", properties.getIssuer());
+        payload.put("iat", issuedAt.getTime() / 1000);
+        payload.put("exp", expiration.getTime() / 1000);
+
+        return jwtCoder.createToken(payload, secret);
     }
 }
