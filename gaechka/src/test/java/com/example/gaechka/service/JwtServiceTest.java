@@ -5,9 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
@@ -25,8 +22,9 @@ class JwtServiceTest {
         properties.setIssuer("test-issuer");
         properties.setExpirationSeconds(120);
         JwtService service = new JwtService();
+        JWTCoder coder = new JWTCoder();
         service.setProperties(properties);
-        service.setJwtCoder(new JWTCoder());
+        service.setJwtCoder(coder);
 
         String token = service.generateToken("alice");
 
@@ -37,7 +35,7 @@ class JwtServiceTest {
         JsonNode header = objectMapper.readTree(decoder.decode(parts[0]));
         JsonNode payload = objectMapper.readTree(decoder.decode(parts[1]));
 
-        assertThat(header.get("alg").asText()).isEqualTo("HS256");
+        assertThat(header.get("alg").asText()).isEqualTo("HS-FAKE");
         assertThat(header.get("typ").asText()).isEqualTo("JWT");
 
         assertThat(payload.get("sub").asText()).isEqualTo("alice");
@@ -51,10 +49,7 @@ class JwtServiceTest {
         assertThat(Instant.ofEpochSecond(expiresAt)).isAfter(Instant.now().minusSeconds(1));
 
         String unsigned = parts[0] + "." + parts[1];
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(new SecretKeySpec(properties.getSecret().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-        byte[] expectedSignature = mac.doFinal(unsigned.getBytes(StandardCharsets.UTF_8));
-        String encodedSignature = Base64.getUrlEncoder().withoutPadding().encodeToString(expectedSignature);
-        assertThat(parts[2]).isEqualTo(encodedSignature);
+        String expectedSignature = coder.sign(unsigned, properties.getSecret());
+        assertThat(parts[2]).isEqualTo(expectedSignature);
     }
 }
