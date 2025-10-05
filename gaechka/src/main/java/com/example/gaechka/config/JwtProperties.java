@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.jwt")
 public class JwtProperties {
 
-    private String secret = "";
+    // private String secret = "";
     private long expirationSeconds = 3600;
     private String issuer = "gaechka-auth-service";
 }

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
 public class JwtService {
 
-    private static final int MIN_SECRET_LENGTH = 32; // HS256 требует минимум 256 бит секрета
+    private static final int MIN_SECRET_LENGTH = 32;
 
     @Setter(onMethod_ = @Autowired)
     private JwtProperties properties;
@@ -31,7 +31,7 @@ public class JwtService {
         long expirationMillis = issuedAt.getTime() + properties.getExpirationSeconds() * 1000;
         Date expiration = new Date(expirationMillis);
 
-        Map<String, Object> payload = new HashMap<>();
+        Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("sub", username);
         payload.put("username", username);
         payload.put("iss", properties.getIssuer());
