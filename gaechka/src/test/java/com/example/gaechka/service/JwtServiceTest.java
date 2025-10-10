@@ -28,14 +28,14 @@ class JwtServiceTest {
 
         String token = service.generateToken("alice");
 
-        String[] parts = token.split("\.");
+        String[] parts = token.split("\\.");
         assertThat(parts).hasSize(3);
 
         Base64.Decoder decoder = Base64.getUrlDecoder();
         JsonNode header = objectMapper.readTree(decoder.decode(parts[0]));
         JsonNode payload = objectMapper.readTree(decoder.decode(parts[1]));
 
-        assertThat(header.get("alg").asText()).isEqualTo("HS-FAKE");
+        assertThat(header.get("alg").asText()).isEqualTo("HSFC");
         assertThat(header.get("typ").asText()).isEqualTo("JWT");
 
         assertThat(payload.get("sub").asText()).isEqualTo("alice");
