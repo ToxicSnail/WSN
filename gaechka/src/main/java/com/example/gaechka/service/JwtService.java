@@ -38,6 +38,7 @@ public class JwtService {
         payload.put("iat", issuedAt.getTime() / 1000);
         payload.put("exp", expiration.getTime() / 1000);
 
-        return jwtCoder.createToken(payload, secret);
+        String alg = properties.getAlgorithm();
+        return jwtCoder.createToken(payload, secret, alg);
     }
 }

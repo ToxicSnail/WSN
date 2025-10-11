@@ -13,7 +13,7 @@
 - Gradle 8.x (или совместимый). Можно использовать локально установленный Gradle или добавить обертку (gradle wrapper).
 
 ## Настройка
-Конфиг находится в src/main/resources/application.yml:
+Конфиг находится в `src/main/resources/application.yml`:
 
     app:
       jwt:

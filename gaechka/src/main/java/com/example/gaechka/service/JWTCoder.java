@@ -3,6 +3,8 @@ package com.example.gaechka.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -16,9 +18,9 @@ public class JWTCoder {
     private static final Base64.Encoder BASE64_URL_ENCODER = Base64.getUrlEncoder().withoutPadding();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public String createToken(Map<String, Object> payload, String secret) {
+    public String createToken(Map<String, Object> payload, String secret, String algorithm) {
         Map<String, Object> header = new LinkedHashMap<>();
-        header.put("alg", "HSFC");
+        header.put("alg", algorithm);
         header.put("typ", "JWT");
         String headerJson = toJson(header);
         String payloadJson = toJson(payload);
@@ -27,9 +29,13 @@ public class JWTCoder {
         String encodedPayload = BASE64_URL_ENCODER.encodeToString(payloadJson.getBytes(StandardCharsets.UTF_8));
 
         String unsignedToken = encodedHeader + "." + encodedPayload;
-        String signature = sign(unsignedToken, secret);
+        String signature = signWithAlg(unsignedToken, secret, algorithm);
 
         return unsignedToken + "." + signature;
+    }
+
+    public String createToken(Map<String, Object> payload, String secret) {
+        return createToken(payload, secret, "HC256");
     }
 
     String sign(String data, String secret) {
@@ -67,11 +73,65 @@ public class JWTCoder {
         return BASE64_URL_ENCODER.encodeToString(buffer.array());
     }
 
+    String sign(String data, String secret) {
+        byte[] message = data.getBytes(StandardCharsets.UTF_8);
+        byte[] key = secret.getBytes(StandardCharsets.UTF_8);
+        if (message.length == 0) {
+            return "";
+        }
+        if (key.length == 0) {
+            throw new IllegalArgumentException("Secret must not be empty for signature");
+        }
+
+        int[] state = {
+                0x243F6A88,
+                0x85A308D3,
+                0x13198A2E,
+                0x03707344
+        };
+
+        int max = Math.max(message.length, key.length);
+        for (int i = 0; i < max; i++) {
+            int msgByte = message[i % message.length] & 0xFF;
+            int keyByte = key[i % key.length] & 0xFF;
+            int mixed = Integer.rotateLeft(msgByte + (i * 31), (i % 5) + 1) ^ keyByte;
+            int idx = i % state.length;
+            state[idx] = Integer.rotateLeft(state[idx] ^ mixed ^ (keyByte << (idx + 1)), (i % 13) + 3) + 0x9E3779B9;
+            state[idx] ^= Integer.rotateLeft(msgByte * (idx + 1), (idx + i) % 17 + 1);
+        }
+
+        for (int i = 0; i < state.length; i++) {
+            state[i] = Integer.rotateLeft(state[i] ^ max, (i * 7) % 19 + 1);
+        }
+
+        java.nio.ByteBuffer buffer = java.nio.ByteBuffer.allocate(state.length * 4);
+        for (int value : state) {
+            buffer.putInt(value);
+        }
+        return BASE64_URL_ENCODER.encodeToString(buffer.array());
+    }
+
+    String signWithAlg(String data, String secret, String algorithm) {
+        if (!"HS256".equalsIgnoreCase(algorithm)) {
+            return sign(data, secret);
+        }
+
+        try {
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            mac.init(key);
+            byte[] raw = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+            return BASE64_URL_ENCODER.encodeToString(raw);
+        } catch (Exception e) {
+            throw new IllegalStateException("Can't count HMAC-SHA256", e);
+        }
+    }
+
     private String toJson(Map<String, Object> data) {
         try {
             return OBJECT_MAPPER.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to transform data to JSON", e);
+            throw new IllegalStateException("Can't convert data to JSON", e);
         }
     }
 }

@@ -28,7 +28,7 @@ public class TokenForwarder {
 
     public void forward(String token) {
         if (properties == null || !StringUtils.hasText(properties.getUrl())) {
-            log.debug("Пересылка пропущена, потому что URL не задан");
+            log.debug("Forwarding skipped, URL was not set");
             return;
         }
 
@@ -41,9 +41,9 @@ public class TokenForwarder {
 
         try {
             restTemplate.postForEntity(properties.getUrl(), httpEntity, Void.class);
-            log.info("JWT успешно отправлен на {}", properties.getUrl());
+            log.info("JWT sent to {}", properties.getUrl());
         } catch (RestClientException ex) {
-            log.error("Не получилось отправить JWT на {}", properties.getUrl(), ex);
+            log.error("Can't send JWT to {}", properties.getUrl(), ex);
             throw ex;
         }
     }

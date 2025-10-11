@@ -21,6 +21,7 @@ class JwtServiceTest {
         properties.setSecret("this-is-a-test-secret-key-with-enough-length");
         properties.setIssuer("test-issuer");
         properties.setExpirationSeconds(120);
+        properties.setAlgorithm("HC256");
         JwtService service = new JwtService();
         JWTCoder coder = new JWTCoder();
         service.setProperties(properties);
@@ -35,7 +36,7 @@ class JwtServiceTest {
         JsonNode header = objectMapper.readTree(decoder.decode(parts[0]));
         JsonNode payload = objectMapper.readTree(decoder.decode(parts[1]));
 
-        assertThat(header.get("alg").asText()).isEqualTo("HSFC");
+        assertThat(header.get("alg").asText()).isEqualTo("HC256");
         assertThat(header.get("typ").asText()).isEqualTo("JWT");
 
         assertThat(payload.get("sub").asText()).isEqualTo("alice");
@@ -49,7 +50,7 @@ class JwtServiceTest {
         assertThat(Instant.ofEpochSecond(expiresAt)).isAfter(Instant.now().minusSeconds(1));
 
         String unsigned = parts[0] + "." + parts[1];
-        String expectedSignature = coder.sign(unsigned, properties.getSecret());
+        String expectedSignature = coder.signWithAlg(unsigned, properties.getSecret(), properties.getAlgorithm());
         assertThat(parts[2]).isEqualTo(expectedSignature);
     }
 }
