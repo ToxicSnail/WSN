@@ -1,6 +1,6 @@
-# Gaechka Auth Service
+# token-generator
 
-Микросервис написанный на Spring Boot и Java 17, который принимает учетные данные пользователя, выпускает для них JWT и отправляет токен во внешний API.
+Микросервис на Spring Boot и Java 17, который принимает учетные данные пользователя, выпускает для них JWT и отправляет токен во внешний API.
 
 ## Возможности
 - REST endpoint POST /api/auth/token принимает JSON { "username": "...", "password": "..." }.
@@ -19,7 +19,7 @@
       jwt:
         secret: "секрет"
         expiration-seconds: 3600
-        issuer: gaechka-auth-service
+        issuer: token-generator
       forwarding:
         url: "https://external.service.example/api/token"
 
