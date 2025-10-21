@@ -1,6 +1,6 @@
-package com.example.gaechka.service;
+package com.example.tokengenerator.service;
 
-import com.example.gaechka.config.JwtProperties;
+import com.example.tokengenerator.config.JwtProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

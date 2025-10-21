@@ -1,7 +1,7 @@
-package com.example.gaechka.api;
+package com.example.tokengenerator.api;
 
-import com.example.gaechka.service.JwtService;
-import com.example.gaechka.service.TokenForwarder;
+import com.example.tokengenerator.service.JwtService;
+import com.example.tokengenerator.service.TokenForwarder;
 import jakarta.validation.Valid;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package com.example.gaechka.service;
+package com.example.tokengenerator.service;
 
-import com.example.gaechka.config.ForwardingProperties;
+import com.example.tokengenerator.config.ForwardingProperties;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

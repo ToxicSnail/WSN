@@ -1,4 +1,4 @@
-package com.example.gaechka;
+package com.example.tokengenerator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class GaechkaAuthServiceApplication {
+public class TokenGeneratorApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GaechkaAuthServiceApplication.class, args);
+        SpringApplication.run(TokenGeneratorApplication.class, args);
     }
 }

@@ -1,6 +1,6 @@
-package com.example.gaechka.service;
+package com.example.tokengenerator.service;
 
-import com.example.gaechka.config.JwtProperties;
+import com.example.tokengenerator.config.JwtProperties;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.gaechka.config;
+package com.example.tokengenerator.config;
 
 import lombok.Getter;
 import lombok.Setter;

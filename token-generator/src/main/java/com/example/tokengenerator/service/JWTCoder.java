@@ -1,4 +1,4 @@
-package com.example.gaechka.service;
+package com.example.tokengenerator.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -6,6 +6,6 @@ app:
     secret: ""
     algorithm: "HC256"
     expiration-seconds: 3600
-    issuer: gaechka-auth-service
+    issuer: token-generator
   forwarding:
     url: ""

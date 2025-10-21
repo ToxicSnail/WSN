@@ -1,4 +1,4 @@
-package com.example.gaechka.api;
+package com.example.tokengenerator.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
