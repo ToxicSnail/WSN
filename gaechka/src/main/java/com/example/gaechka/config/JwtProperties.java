@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class JwtProperties {
 
     private String secret;
-    private String algorithm = "HC256"; // weak
+    private String algorithm = "HC256";
     private long expirationSeconds = 3600;
     private String issuer = "auth-service";
 }

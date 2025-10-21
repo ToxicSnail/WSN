@@ -44,41 +44,6 @@ public class JWTCoder {
         if (message.length == 0) {
             return "";
         }
-
-        int[] state = {
-                0x243F6A88,
-                0x85A308D3,
-                0x13198A2E,
-                0x03707344
-        };
-
-        int max = Math.max(message.length, key.length);
-        for (int i = 0; i < max; i++) {
-            int msgByte = message[i % message.length] & 0xFF;
-            int keyByte = key[i % key.length] & 0xFF;
-            int mixed = Integer.rotateLeft(msgByte + (i * 31), (i % 5) + 1) ^ keyByte;
-            int idx = i % state.length;
-            state[idx] = Integer.rotateLeft(state[idx] ^ mixed ^ (keyByte << (idx + 1)), (i % 13) + 3) + 0x9E3779B9;
-            state[idx] ^= Integer.rotateLeft(msgByte * (idx + 1), (idx + i) % 17 + 1);
-        }
-
-        for (int i = 0; i < state.length; i++) {
-            state[i] = Integer.rotateLeft(state[i] ^ max, (i * 7) % 19 + 1);
-        }
-
-        ByteBuffer buffer = ByteBuffer.allocate(state.length * 4);
-        for (int value : state) {
-            buffer.putInt(value);
-        }
-        return BASE64_URL_ENCODER.encodeToString(buffer.array());
-    }
-
-    String sign(String data, String secret) {
-        byte[] message = data.getBytes(StandardCharsets.UTF_8);
-        byte[] key = secret.getBytes(StandardCharsets.UTF_8);
-        if (message.length == 0) {
-            return "";
-        }
         if (key.length == 0) {
             throw new IllegalArgumentException("Secret must not be empty for signature");
         }

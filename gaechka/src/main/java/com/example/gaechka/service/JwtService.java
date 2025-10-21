@@ -15,12 +15,21 @@ public class JwtService {
 
     private static final int MIN_SECRET_LENGTH = 32;
 
-    @Setter(onMethod_ = @Autowired)
+    @Autowired
     private JwtProperties properties;
 
-    @Setter(onMethod_ = @Autowired)
+    @Autowired
     private JWTCoder jwtCoder;
 
+    // Для тестов и явной подстановки зависимостей
+    public void setProperties(JwtProperties properties) {
+        this.properties = properties;
+    }
+
+    public void setJwtCoder(JWTCoder jwtCoder) {
+        this.jwtCoder = jwtCoder;
+    }
+    
     public String generateToken(String username) {
         String secret = properties.getSecret();
         if (secret == null || secret.getBytes(StandardCharsets.UTF_8).length < MIN_SECRET_LENGTH) {

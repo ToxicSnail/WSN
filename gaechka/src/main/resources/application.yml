@@ -3,8 +3,8 @@ server:
 
 app:
   jwt:
-    secret: "WeakSecret"  #weak
-    algorithm: "HC256"  #weak
+    secret: ""
+    algorithm: "HC256"
     expiration-seconds: 3600
     issuer: gaechka-auth-service
   forwarding:

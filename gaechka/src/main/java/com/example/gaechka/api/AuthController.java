@@ -18,10 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Setter(onMethod_ = @Autowired)
+    @Autowired
     private JwtService jwtService;
 
-    @Setter(onMethod_ = @Autowired)
+    @Autowired
     private TokenForwarder tokenForwarder;
 
     @PostMapping("/token")

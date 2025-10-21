@@ -21,7 +21,7 @@ public class TokenForwarder {
 
     private static final Logger log = LoggerFactory.getLogger(TokenForwarder.class);
 
-    @Setter(onMethod_ = @Autowired)
+    @Autowired
     private ForwardingProperties properties;
 
     private final RestTemplate restTemplate = new RestTemplate();
