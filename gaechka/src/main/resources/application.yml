@@ -3,8 +3,8 @@ server:
 
 app:
   jwt:
-    secret: "secret"  #weak
-    # algorithm: "HC256"  #weak можно убрать, объявоение в jwtprop
+    secret: "WeakSecret"  #weak
+    algorithm: "HC256"  #weak
     expiration-seconds: 3600
     issuer: gaechka-auth-service
   forwarding:
