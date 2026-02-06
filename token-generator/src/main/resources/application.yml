@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ""
+    algorithm: "HC256"
+    expiration-seconds: 3600
+    issuer: token-generator
+  forwarding:
+    url: ""

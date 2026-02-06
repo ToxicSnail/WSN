@@ -1,0 +1,36 @@
+rules:
+  - id: weak-jwt-secret-in-yaml
+    severity: ERROR
+    message: >-
+      Слабый JWT секрет в конфиге.
+    languages: [yaml]
+    paths:
+      include:
+        - "**/*.yml"
+        - "**/*.yaml"
+    pattern-regex: (?m)^\s*secret\s*:\s*["]?(''?|""|secret|.{0,31})["]?\s*(#.*)?$
+
+  - id: insecure-jwt-algorithm-in-yaml
+    severity: ERROR
+    message: >-
+      Небезопасный (кастомный) алгоритм подписи JWT в конфиге.
+    languages: [yaml]
+    paths:
+      include:
+        - "**/*.yml"
+        - "**/*.yaml"
+    pattern-regex: (?m)^\s*algorithm\s*:\s*["']?HC256["']?\s*(#.*)?$
+
+  - id: insecure-jwt-algorithm-java
+    severity: ERROR
+    message: >-
+      В коде используется кастомный алгоритм подписи JWT.
+    languages: [java]
+    paths:
+      include:
+        - "**/*.java"
+    pattern-either:
+      - pattern: |
+          private $TYPE algorithm = "HC256";
+      - pattern: |
+          $CODER.createToken($PAYLOAD, $SECRET, "HC256")
